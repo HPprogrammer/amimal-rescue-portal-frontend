@@ -1,11 +1,15 @@
+document.getElementById("donateBtn").addEventListener("click", () => alert("Thank you! 🐶🐱"));
+
 document.getElementById('regForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const name = document.getElementById('name').value;
     const email = document.getElementById('email').value;
+    const msgBox = document.getElementById('msg');
 
-    // Is URL ko Azure Backend deploy hone ke baad update karna
-    const BACKEND_URL = "http://<YOUR_AZURE_BACKEND_IP_OR_DNS>:3000";
+    // Is IP ko apni Backend Service ki External IP se replace karein
+    const BACKEND_URL = "http://40.81.248.103"; 
 
+    msgBox.innerText = "Connecting...";
     try {
         const res = await fetch(`${BACKEND_URL}/register`, {
             method: 'POST',
@@ -13,8 +17,10 @@ document.getElementById('regForm').addEventListener('submit', async (e) => {
             body: JSON.stringify({ name, email })
         });
         const data = await res.json();
-        document.getElementById('msg').innerText = data.message;
+        msgBox.innerText = data.message;
+        msgBox.style.color = "green";
     } catch (err) {
-        document.getElementById('msg').innerText = "Error connecting to backend";
+        msgBox.innerText = "Error connecting to backend";
+        msgBox.style.color = "red";
     }
 });
